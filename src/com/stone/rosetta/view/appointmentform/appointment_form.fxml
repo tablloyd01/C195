@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@appointment_form.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stone.rosetta.view.appointmentform.AppointmentFormController">
+   <children>
+      <VBox maxWidth="1.7976931348623157E308">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%customer.name" />
+            <TextField fx:id="customerNameTF" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%title" />
+            <TextField fx:id="titleTF" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+            <Label fx:id="titleHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="69.0" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%description" />
+            <TextArea fx:id="descriptionTA" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="400.0" wrapText="true" />
+            <Label fx:id="descriptionHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="128.0" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%location" />
+            <TextField fx:id="locationTF" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+            <Label fx:id="locationHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+         </children>
+      </VBox>
+      <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+         <children>
+            <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%contact" />
+                  <TextField fx:id="contactTF" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                  <Label fx:id="contactHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+               </children>
+            </VBox>
+            <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%type" />
+                  <TextField fx:id="typeTF" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+                  <Label fx:id="typeHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <VBox layoutX="10.0" layoutY="305.0" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="%url" />
+            <TextField fx:id="urlTF" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+            <Label fx:id="urlHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="364.0" maxWidth="1.7976931348623157E308">
+         <children>
+            <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+               <children>
+                  <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="%start.date" />
+                        <DatePicker fx:id="startDP" editable="false" maxWidth="1.7976931348623157E308" showWeekNumbers="true" />
+                     </children>
+                  </VBox>
+                  <VBox fillWidth="false" HBox.hgrow="NEVER">
+                     <children>
+                        <Label text="hrs" />
+                        <Spinner fx:id="startHourS" editable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="75.0" />
+                     </children>
+                  </VBox>
+                  <VBox fillWidth="false" HBox.hgrow="NEVER">
+                     <children>
+                        <Label text="min" />
+                        <Spinner fx:id="startMintS" editable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="75.0" />
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="startDPHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+         </children>
+      </VBox>
+      <VBox maxWidth="1.7976931348623157E308">
+         <children>
+            <HBox maxWidth="1.7976931348623157E308" spacing="10.0">
+               <children>
+                  <VBox maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="%end.date" />
+                        <DatePicker fx:id="endDP" editable="false" maxWidth="1.7976931348623157E308" showWeekNumbers="true" />
+                     </children>
+                  </VBox>
+                  <VBox fillWidth="false" HBox.hgrow="NEVER">
+                     <children>
+                        <Label text="hrs" />
+                        <Spinner fx:id="endHourS" editable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="75.0" />
+                     </children>
+                  </VBox>
+                  <VBox fillWidth="false" HBox.hgrow="NEVER">
+                     <children>
+                        <Label text="min" />
+                        <Spinner fx:id="endMintS" editable="true" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="75.0" />
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="endDPHL" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="error_txt" />
+         </children>
+      </VBox>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <children>
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#close" text="%close" />
+            <Button mnemonicParsing="false" onAction="#save" text="%save" />
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#saveAndClose" text="%saveandclose" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

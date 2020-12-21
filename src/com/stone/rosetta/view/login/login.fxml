@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" style="-fx-border-color: black;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.stone.rosetta.view.login.LoginController">
+    <stylesheets>
+        <URL value="@login.css" />
+    </stylesheets>
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" minWidth="300.0" prefWidth="300.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rosetta">
+                     <font>
+                        <Font size="39.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stone">
+                     <font>
+                        <Font name="System Bold" size="48.0" />
+                     </font>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets left="60.0" right="60.0" />
+               </padding>
+            </VBox>
+            <Separator maxHeight="1.7976931348623157E308" orientation="VERTICAL">
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+            </Separator>
+            <VBox alignment="CENTER" minWidth="220.0" prefWidth="220.0" spacing="10.0">
+               <children>
+                  <VBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Label text="%username" />
+                        <TextField fx:id="usernameTextField" />
+                        <Label fx:id="usernameHintLabel" styleClass="error_txt" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Label text="%password" />
+                        <TextField fx:id="passwordTextField" />
+                        <Label fx:id="passwordHintLabel" styleClass="error_txt" />
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER_RIGHT" fillHeight="false" spacing="10.0">
+                     <children>
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#exit" text="%exit" />
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#login" text="%login" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
