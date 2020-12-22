@@ -20,7 +20,12 @@
               <URL value="@weeklyview.css" />
           </stylesheets>
          <children>
-            <TableView fx:id="appointmentTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label text="%weekly.view" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TableView fx:id="appointmentTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
               <columns>
                 <TableColumn fx:id="mondayTC" prefWidth="75.0" text="%monday" />
                 <TableColumn fx:id="tuedayTC" prefWidth="75.0" text="%tuesday" />
@@ -35,6 +40,9 @@
                </columnResizePolicy>
             </TableView>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </AnchorPane>
    </center>
    <top>
@@ -64,7 +72,7 @@
             </Label>
         </items>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </ToolBar>
    </top>

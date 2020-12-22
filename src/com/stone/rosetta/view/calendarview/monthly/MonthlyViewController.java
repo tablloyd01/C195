@@ -151,6 +151,7 @@ public class MonthlyViewController implements Initializable {
     
     private TableView<Appointment> getListView(LocalDate localDate){
         TableView<Appointment> view=  new TableView<>();
+        view.setTableMenuButtonVisible(false);
 //        view.columnResizePolicyProperty().setValue((Callback<TableView.ResizeFeatures, Boolean>) (TableView.ResizeFeatures param) -> false);
         TableColumn<Appointment, String> tableColumn = new TableColumn<>(String.valueOf(localDate.getDayOfMonth()));
         tableColumn.setCellValueFactory((cellData) -> {
