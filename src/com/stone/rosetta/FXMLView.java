@@ -19,4 +19,7 @@ public class FXMLView {
     public static String CUSTOMER_FORM_FXML_LOCATION = BASE_VIEW_LOCATION + "customerform/customer_form.fxml";
     public static String APPOINTMENT_FORM_FXML_LOCATION = BASE_VIEW_LOCATION + "appointmentform/appointment_form.fxml";
     public static String CALENDAR_VIEW_FXML_LOCATION = BASE_VIEW_LOCATION + "calendarview/calendarview.fxml";
+    public static String CALENDAR_MONTHLY_VIEW_FXML_LOCATION = BASE_VIEW_LOCATION + "calendarview/monthly/monthlyview.fxml";
+    public static String CALENDAR_WEEKLY_VIEW_FXML_LOCATION = BASE_VIEW_LOCATION + "calendarview/weekly/weeklyview.fxml";
+    public static String REPORTS_FXML_LOCATION = BASE_VIEW_LOCATION + "reports/reports.fxml";
 }

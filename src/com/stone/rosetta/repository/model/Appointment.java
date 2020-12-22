@@ -16,6 +16,10 @@ public class Appointment extends Entity {
 
     public Appointment() {
     }
+    
+    public Appointment(String title) {
+        this.title = title;
+    }
 
     public Appointment(Customer customer, User user, String title, String description, String location, String contact, String type, String url, LocalDateTime start, LocalDateTime end) {
         this.customer = customer;

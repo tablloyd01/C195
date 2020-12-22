@@ -5,7 +5,6 @@
  */
 package com.stone.rosetta.view.customer;
 
-import com.stone.rosetta.repository.CustomerRepository;
 import com.stone.rosetta.repository.model.Customer;
 import com.stone.rosetta.service.AppointmentService;
 import com.stone.rosetta.service.CustomerService;
@@ -27,7 +26,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -240,14 +238,10 @@ public class CustomerController implements Initializable {
                 try {
                     appointmentService.save(appointment);
                     return appointment.getId();
-                } catch (SQLException ex) {
+                } catch (SQLException | EntityNotUpdatedException | ClassNotFoundException ex) {
                     Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (EntityNotUpdatedException ex) {
-                    Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+                    throw ex;
                 }
-                return null;
             });
         } catch (IOException ex) {
             Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);

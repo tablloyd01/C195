@@ -70,6 +70,7 @@ public class ViewFactory {
         parentStage.setScene(new Scene(root));
         parentStage.setTitle(ResourceBundlerUtil.getResourceBundle().getString("app.title"));
         parentStage.show();
+        
         return controller;
     }
 
@@ -77,8 +78,13 @@ public class ViewFactory {
         this.parentStage = stage;
     }
     
-    public AnchorPane getCalendarViewPane() throws IOException {
+    public Pane getCalendarViewPane() throws IOException {
         System.out.println("getCalendarViewPane");
+//        try {
+//            new ScenicView().start(new Stage());
+//        } catch (Exception ex) {
+//            Logger.getLogger(ViewFactory.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         FXMLLoader fxmlLoader = getFXMLLoader(FXMLView.CALENDAR_VIEW_FXML_LOCATION);
         return fxmlLoader.load();
     }
@@ -138,5 +144,23 @@ public class ViewFactory {
         AppointmentFormController controller = fxmlLoader.getController();
         controller.setStage(stage);
         return controller;
+    }
+
+    public Pane getCalendarMonthlyView() throws IOException {
+        System.out.println("getCalendarMonthlyView");
+        FXMLLoader fxmlLoader = getFXMLLoader(FXMLView.CALENDAR_MONTHLY_VIEW_FXML_LOCATION);
+        return fxmlLoader.load();
+    }
+
+    public Pane getCalendarWeeklyView() throws IOException {
+        System.out.println("getCalendarWeeklyView");
+        FXMLLoader fxmlLoader = getFXMLLoader(FXMLView.CALENDAR_WEEKLY_VIEW_FXML_LOCATION);
+        return fxmlLoader.load();
+    }
+
+    public Pane getReportsViewPane() throws IOException {
+        System.out.println("getCalendarWeeklyView");
+        FXMLLoader fxmlLoader = getFXMLLoader(FXMLView.REPORTS_FXML_LOCATION);
+        return fxmlLoader.load();
     }
 }

@@ -5,6 +5,7 @@
  */
 package com.stone.rosetta.view.main;
 
+import com.stone.rosetta.service.AppointmentService;
 import com.stone.rosetta.service.UserAuthenticationService;
 import com.stone.rosetta.view.AbstractController;
 import com.stone.rosetta.view.ViewFactory;
@@ -19,7 +20,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -39,6 +39,7 @@ public class MainController extends AbstractController implements Initializable 
     @FXML
     private BorderPane borderPane;
     private ResourceBundle rb;
+    private AppointmentService appointmentService;
 
     public MainController() {
 
@@ -47,6 +48,7 @@ public class MainController extends AbstractController implements Initializable 
         };
         try {
             authenticationService = UserAuthenticationService.getInstance();
+            appointmentService = new AppointmentService();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,23 +73,26 @@ public class MainController extends AbstractController implements Initializable 
         menuList.getItems().add(rb.getString("customers"));
         menuList.getItems().add(rb.getString("calendar"));
         menuList.getItems().add(rb.getString("reports"));
-        menuList.getItems().add(rb.getString("users"));
+//        menuList.getItems().add(rb.getString("users"));
         menuList.getSelectionModel().selectedItemProperty().addListener(menuChangeListener);
         menuList.getSelectionModel().select(rb.getString("appointments"));
-//        menu list
+
     }
 
     private void changePane(String newValue) {
         try {
             Pane pane = null;
-            if (newValue.equalsIgnoreCase(rb.getString("users"))) {
-                pane = ViewFactory.getInstance().getUsersPane();
-            } else if (newValue.equalsIgnoreCase(rb.getString("customers"))) {
+//            if (newValue.equalsIgnoreCase(rb.getString("users"))) {
+//                pane = ViewFactory.getInstance().getUsersPane();
+//            } else 
+            if (newValue.equalsIgnoreCase(rb.getString("customers"))) {
                 pane = ViewFactory.getInstance().getCustomersPane();
             } else if (newValue.equalsIgnoreCase(rb.getString("appointments"))) {
                 pane = ViewFactory.getInstance().getAppointmentPane();
             } else if (newValue.equalsIgnoreCase(rb.getString("calendar"))) {
                 pane = ViewFactory.getInstance().getCalendarViewPane();
+            } else if (newValue.equalsIgnoreCase(rb.getString("reports"))) {
+                pane = ViewFactory.getInstance().getReportsViewPane();
             }
             if (pane != null) {
                 borderPane.setCenter(pane);

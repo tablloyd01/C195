@@ -9,7 +9,11 @@ import com.stone.rosetta.repository.AppointmentRepository;
 import com.stone.rosetta.repository.model.Appointment;
 import com.stone.rosetta.repository.model.User;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
+import com.stone.rosetta.throwable.OutsideBusinessHoursException;
+import com.stone.rosetta.throwable.SchedulingOverlappingAppointmentException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -28,7 +32,24 @@ public class AppointmentService {
         return this.appointmentRepository.getAllToday();
     }
     
-    public Appointment save(Appointment a) throws SQLException, EntityNotUpdatedException, ClassNotFoundException{
+    public Appointment save(Appointment a) throws SQLException, EntityNotUpdatedException, ClassNotFoundException,
+            OutsideBusinessHoursException, SchedulingOverlappingAppointmentException {
+        
+        LocalTime businessStartHour = LocalTime.of(9, 0);
+        LocalTime businessEndHour = LocalTime.of(18, 0);
+        
+        if(a.getStart().toLocalTime().isBefore(businessStartHour) || a.getStart().toLocalTime().isAfter(businessEndHour)){
+            throw new OutsideBusinessHoursException("Outside business hour exception: start time:" + a.getStart().toLocalTime());
+        }
+        if(a.getEnd().toLocalTime().isBefore(businessStartHour) || a.getEnd().toLocalTime().isAfter(businessEndHour)){
+            throw new OutsideBusinessHoursException("Outside business hour exception: end time:" + a.getEnd().toLocalTime());
+        }
+        
+        List<Appointment> appointments = appointmentRepository.getAllByBetween(a.getId(), a.getStart(), a.getEnd());
+        if(appointments != null && appointments.size() > 0){
+            throw new SchedulingOverlappingAppointmentException();
+        }
+        
         User user = UserAuthenticationService.getInstance().getAuthenticatedUser();
         a.setUpdatedBy(user.getUsername());
         a.setUser(user);
@@ -51,6 +72,18 @@ public class AppointmentService {
 
     public List<Appointment> getUpCommingAll() throws SQLException {
         return this.appointmentRepository.getUpCommingAll();
+    }
+
+    public List<Appointment> getByMonth(LocalDate localDate) throws SQLException {
+        return this.appointmentRepository.getByMonth(localDate);        
+    }
+
+    public List<Appointment> getAllByWeek(LocalDate localDate) throws SQLException {
+        return this.appointmentRepository.getAllByWeek(localDate);
+    }
+
+    public List<Appointment> getAllNextWithin15Minutes() throws SQLException {
+        return this.appointmentRepository.getAllNextWithin15Minutes();
     }
     
     

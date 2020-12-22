@@ -6,7 +6,6 @@
 package com.stone.rosetta;
 
 import com.stone.rosetta.service.UserAuthenticationService;
-import com.stone.rosetta.util.ResourceBundlerUtil;
 import com.stone.rosetta.view.ViewFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,5 +42,13 @@ public class RosettaStone extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        System.out.println("on stop");
+    }
+    
+    
     
 }

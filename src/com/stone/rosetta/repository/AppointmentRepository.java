@@ -11,6 +11,8 @@ import com.stone.rosetta.repository.model.User;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
 import com.stone.rosetta.util.ConvertUtil;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,13 +35,23 @@ public class AppointmentRepository extends CrudRepository<Appointment, Long> {
     
     private final String SELECT_ALL_TODAY_QUERY = SELECT_ALL_QUERY 
             + "WHERE date(a.start) = date(now()) "
-            + "ORDER BY a.start desc ";
+            + "ORDER BY a.start asc ";
     private final String SELECT_ALL_UPCOMING_QUERY = SELECT_ALL_QUERY + ""
-            + "WHERE date(a.start) = date(now()) + 1 "
-            + "ORDER BY a.start desc ";
+            + "WHERE date(a.start) > date(now())"
+            + "ORDER BY a.start asc ";
     private final String SELECT_ALL_PAST_QUERY = SELECT_ALL_QUERY + ""
-            + "WHERE date(a.start) = date(now()) - 1 "
+            + "WHERE date(a.start) < date(now())"
             + "ORDER BY a.start desc ";
+    
+    private final String SELECT_ALL_BY_MONTH_QUERY = SELECT_ALL_QUERY + ""
+            + "WHERE date(a.start) between ? and ? "
+            + "ORDER BY a.start asc ";
+    private final String SELECT_ALL_BY_BETWEEN_DATETIME_QUERY = SELECT_ALL_QUERY + ""
+            + "WHERE ((? between a.start and a.end) or (? between a.start and a.end)) and a.appointmentId != ? "
+            + "ORDER BY a.start asc ";
+    private final String SELECT_ALL_WITHIN_15_MINUTES_QUERY = SELECT_ALL_QUERY + ""
+            + "WHERE a.start between now() and ? "
+            + "ORDER BY a.start asc ";
     
     private final String DELETE_BY_ID_QUERY = "DELETE FROM u06bht.appointment "
             + "WHERE appointmentId=?";
@@ -87,7 +99,7 @@ public class AppointmentRepository extends CrudRepository<Appointment, Long> {
     }
 
     @Override
-    public Appointment update(Appointment t) throws SQLException, EntityNotUpdatedException {
+    public Appointment update(Appointment t) throws SQLException, EntityNotUpdatedException{
         int rows = jdbcHelper.update(UPDATE_QUERY, (ps) -> {
             ps.setLong(1, t.getCustomer().getId());
             ps.setLong(2, t.getUser().getId());
@@ -137,6 +149,41 @@ public class AppointmentRepository extends CrudRepository<Appointment, Long> {
 
     public List<Appointment> getUpCommingAll() throws SQLException {
         return jdbcHelper.findAll(SELECT_ALL_UPCOMING_QUERY, rowMapper);
+    }
+
+    public List<Appointment> getByMonth(LocalDate localDate) throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_ALL_BY_MONTH_QUERY,(ps) -> {
+            ps.setTimestamp(1, Timestamp.valueOf(localDate.atStartOfDay()));
+            LocalDate endOfMonth = localDate.plusMonths(1).minusDays(1);
+            ps.setTimestamp(2, Timestamp.valueOf(endOfMonth.atStartOfDay()));
+            return ps;
+        }, rowMapper);
+    }
+
+    public List<Appointment> getAllByWeek(LocalDate localDate) throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_ALL_BY_MONTH_QUERY,(ps) -> {
+            ps.setTimestamp(1, Timestamp.valueOf(localDate.atStartOfDay()));
+            LocalDate endOfWeek = localDate.plusDays(6);
+            ps.setTimestamp(2, Timestamp.valueOf(endOfWeek.atStartOfDay()));
+            return ps;
+        }, rowMapper);
+    }
+
+    public List<Appointment> getAllByBetween(Long id, LocalDateTime start, LocalDateTime end) throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_ALL_BY_BETWEEN_DATETIME_QUERY,(ps) -> {
+            ps.setTimestamp(1, Timestamp.valueOf(start.plusMinutes(1)));
+            ps.setTimestamp(2, Timestamp.valueOf(end.minusMinutes(1)));
+            ps.setLong(3, id == null ? 0l: id);
+            return ps;
+        }, rowMapper);
+    }
+
+    public List<Appointment> getAllNextWithin15Minutes() throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_ALL_WITHIN_15_MINUTES_QUERY,(ps) -> {
+            LocalDateTime withInLD = LocalDateTime.now().plusMinutes(15);
+            ps.setTimestamp(1, Timestamp.valueOf(withInLD));
+            return ps;
+        }, rowMapper);
     }
 
 }

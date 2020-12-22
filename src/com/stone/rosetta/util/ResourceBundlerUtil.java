@@ -24,7 +24,7 @@ public class ResourceBundlerUtil {
     
     public static ResourceBundle getResourceBundle(){
         Locale locale = Locale.getDefault();
-        System.out.printf("language: %s, countrycode: %s", locale.getLanguage(),locale.getCountry());
+        System.out.printf("language: %s, countrycode: %s\n", locale.getLanguage(),locale.getCountry());
         return ResourceBundle.getBundle("labels", locale);
     }
     

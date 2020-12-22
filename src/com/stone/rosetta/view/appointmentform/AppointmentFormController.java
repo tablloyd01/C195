@@ -9,19 +9,21 @@ import com.stone.rosetta.repository.model.Appointment;
 import com.stone.rosetta.repository.model.Customer;
 import com.stone.rosetta.service.AppointmentService;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
+import com.stone.rosetta.throwable.InvalidFormException;
+import com.stone.rosetta.throwable.OutsideBusinessHoursException;
+import com.stone.rosetta.throwable.SchedulingOverlappingAppointmentException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -29,7 +31,6 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -132,20 +133,12 @@ public class AppointmentFormController implements Initializable {
     }
     
     @FXML
-    public void save(Event event){
-        if(this.formAction != null && isFormValid()){
-            if(this.appointment == null)
-                this.appointment = new Appointment();
-            this.appointment.setTitle(titleTF.getText().trim());
-            this.appointment.setDescription(descriptionTA.getText().trim());
-            this.appointment.setLocation(locationTF.getText().trim());
-            this.appointment.setContact(contactTF.getText().trim());
-            this.appointment.setType(typeTF.getText().trim());
-            this.appointment.setUrl(urlTF.getText().trim());
-            this.appointment.setCustomer(this.customer);
-            this.appointment.setStart(getStartLocalDateTime());
-            this.appointment.setEnd(getEndLocalDateTime());
-            this.formAction.action(appointment);
+    public void save(Event event) {
+        try {
+            saveAppointment();
+        } catch (SQLException | EntityNotUpdatedException | ClassNotFoundException | InvalidFormException | OutsideBusinessHoursException | SchedulingOverlappingAppointmentException ex) {
+            Logger.getLogger(AppointmentFormController.class.getName()).log(Level.SEVERE, null, ex);
+            showErrorAlert(ex);
         }
     }
     
@@ -153,13 +146,19 @@ public class AppointmentFormController implements Initializable {
     public void close(Event event){
         stage.close();
     };
+    
     @FXML
     public void saveAndClose(Event event){
-        save(event);
-        close(event);
+        try {
+            saveAppointment();
+            close(event);
+        } catch (SQLException | ClassNotFoundException | EntityNotUpdatedException | InvalidFormException | OutsideBusinessHoursException | SchedulingOverlappingAppointmentException ex) {
+            Logger.getLogger(AppointmentFormController.class.getName()).log(Level.SEVERE, null, ex);
+            showErrorAlert(ex);
+        }
     };
 
-    private boolean isFormValid() {
+    private boolean isFormValid() throws InvalidFormException {
         boolean isValid = true;
         this.titleHL.setText("");
         if(this.titleTF.getText().trim().isEmpty()){
@@ -201,18 +200,21 @@ public class AppointmentFormController implements Initializable {
             this.endDPHL.setText(rb.getString("ui.error.field.required"));
             isValid = false;
         }
-        return isValid;
+        if(isValid)
+            return isValid;
+        else
+            throw new InvalidFormException();
     }
 
     private LocalDateTime getStartLocalDateTime() {
-        LocalDate localDate = endDP.getValue();
-        LocalTime localTime = LocalTime.of(endHourS.getValue(), endMintS.getValue());
+        LocalDate localDate = startDP.getValue();
+        LocalTime localTime = LocalTime.of(startHourS.getValue(), startMintS.getValue());
         return LocalDateTime.of(localDate, localTime);
     }
 
     private LocalDateTime getEndLocalDateTime() {
-        LocalDate localDate = startDP.getValue();
-        LocalTime localTime = LocalTime.of(startHourS.getValue(), startMintS.getValue());
+        LocalDate localDate = endDP.getValue();
+        LocalTime localTime = LocalTime.of(endHourS.getValue(), endMintS.getValue());
         return LocalDateTime.of(localDate, localTime);
     }
 
@@ -235,9 +237,33 @@ public class AppointmentFormController implements Initializable {
                 this.setCustomer(this.appointment.getCustomer());
         }
     }
+
+    private void saveAppointment() throws SQLException, EntityNotUpdatedException, ClassNotFoundException, InvalidFormException, OutsideBusinessHoursException, SchedulingOverlappingAppointmentException {
+        if(this.formAction != null && isFormValid()){
+            if(this.appointment == null)
+                this.appointment = new Appointment();
+            this.appointment.setTitle(titleTF.getText().trim());
+            this.appointment.setDescription(descriptionTA.getText().trim());
+            this.appointment.setLocation(locationTF.getText().trim());
+            this.appointment.setContact(contactTF.getText().trim());
+            this.appointment.setType(typeTF.getText().trim());
+            this.appointment.setUrl(urlTF.getText().trim());
+            this.appointment.setCustomer(this.customer);
+            this.appointment.setStart(getStartLocalDateTime());
+            this.appointment.setEnd(getEndLocalDateTime());
+            this.formAction.action(appointment);
+        }
+    }
+
+    private void showErrorAlert(Throwable ex) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle(ex.getCause().toString());
+        alert.setContentText(ex.getMessage());
+        alert.show();
+    }
     
     public interface FormAction{
-        public Long action(Appointment appointment);
+        public Long action(Appointment appointment) throws SQLException, EntityNotUpdatedException, ClassNotFoundException, OutsideBusinessHoursException, SchedulingOverlappingAppointmentException;
     }
 
 

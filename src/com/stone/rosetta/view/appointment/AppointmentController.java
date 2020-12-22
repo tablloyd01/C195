@@ -26,7 +26,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
@@ -113,11 +112,7 @@ public class AppointmentController implements Initializable {
                     this.appointmentService.save(appointment);
                     refreshTable();
                     return appointment.getId();
-                } catch (SQLException ex) {
-                    Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (EntityNotUpdatedException ex) {
-                    Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (SQLException | EntityNotUpdatedException | ClassNotFoundException ex) {
                     Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
@@ -140,6 +135,7 @@ public class AppointmentController implements Initializable {
             if(buttonType != null && buttonType.getButtonData().equals(ButtonData.YES)){
                 try {
                     appointmentService.deleteById(a.getId());
+                    refreshTable();
                 } catch (SQLException ex) {
                     Logger.getLogger(AppointmentController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -167,7 +163,6 @@ public class AppointmentController implements Initializable {
                     refreshTodayTable();
                 } else if (newValue.equalsIgnoreCase(rb.getString("upcoming"))) {
                     refreshUpComingTable();
-
                 } else if (newValue.equalsIgnoreCase(rb.getString("past"))) {
                     refreshPastTable();
                 }
