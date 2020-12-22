@@ -8,17 +8,17 @@ import java.util.List;
 
 public class UserRepository extends CrudRepository<User, Long>{
 
-    private static final String INSERT_QUERY = "INSERT INTO u06bht.`user` " +
+    private static final String INSERT_QUERY = "INSERT INTO U06bHt.`user` " +
             "(userName, password, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
             "VALUES(?, ?, 1, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?); ";
-    private static final String SELECT_QUERY = "SELECT u.userId, u.userName, u.active FROM u06bht.`user` u";
-    private static final String UPDATE_QUERY = "UPDATE u06bht.`user` SET " +
+    private static final String SELECT_QUERY = "SELECT u.userId, u.userName, u.active FROM U06bHt.`user` u";
+    private static final String UPDATE_QUERY = "UPDATE U06bHt.`user` SET " +
             "`userName` = ?, `active` = ?, `lastUpdate` = CURRENT_TIMESTAMP, `lastUpdateBy` = ? " +
             "WHERE userId = ? ";
-    private static final String DELETE_QUERY = "DELETE FROM u06bht.`user` " +
+    private static final String DELETE_QUERY = "DELETE FROM U06bHt.`user` " +
             "WHERE userId = ?;";
-    private static final String SELECT_BY_USERID_QUERY = "SELECT * FROM u06bht.`user` u WHERE u.userId = ?";
-    private static final String SELECT_BY_USERNAME_QUERY = "SELECT u.userId, u.userName, u.password, u.active FROM u06bht.`user` u WHERE u.userName = ?";
+    private static final String SELECT_BY_USERID_QUERY = "SELECT * FROM U06bHt.`user` u WHERE u.userId = ?";
+    private static final String SELECT_BY_USERNAME_QUERY = "SELECT u.userId, u.userName, u.password, u.active FROM U06bHt.`user` u WHERE u.userName = ?";
 
     public UserRepository() throws ClassNotFoundException {
         super();

@@ -14,19 +14,19 @@ public class CustomerRepository extends CrudRepository<Customer, Long> {
     public CustomerRepository() throws ClassNotFoundException {
     }
 
-    private static final String DELETE_BY_ID_QUERY = "DELETE FROM u06bht.customer "
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM U06bHt.customer "
             + "WHERE customerId=?;";
-    private static final String UPDATE_QUERY = "UPDATE u06bht.customer "
+    private static final String UPDATE_QUERY = "UPDATE U06bHt.customer "
             + "SET customerName=?, addressId=?, active=?, lastUpdate=CURRENT_TIMESTAMP, lastUpdateBy=? "
             + "WHERE customerId = ?";
-    private static final String INSERT_QUERY = "INSERT INTO u06bht.customer "
+    private static final String INSERT_QUERY = "INSERT INTO U06bHt.customer "
             + "(customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) "
             + "VALUES(?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?);";
     private static final String SELECT_ALL_QUERY = "select c.customerId, c.customerName, c.active, c.addressId, a.address, a.address2, a.postalCode, a.phone, c2.cityId, c2.city, c3.countryId, c3.country "
-            + "from u06bht.customer c "
-            + "left join u06bht.address a on a.addressId = c.addressId "
-            + "left join u06bht.city c2 on c2.cityId = a.cityId "
-            + "left join u06bht.country c3 on c3.countryId = c2.countryId";
+            + "from U06bHt.customer c "
+            + "left join U06bHt.address a on a.addressId = c.addressId "
+            + "left join U06bHt.city c2 on c2.cityId = a.cityId "
+            + "left join U06bHt.country c3 on c3.countryId = c2.countryId";
 
     @Override
     public Customer save(Customer customer) throws SQLException {

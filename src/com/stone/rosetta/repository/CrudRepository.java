@@ -2,7 +2,6 @@ package com.stone.rosetta.repository;
 
 import com.stone.rosetta.jdbc.JdbcHelper;
 import com.stone.rosetta.repository.model.Entity;
-import com.stone.rosetta.repository.model.User;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
 
 import java.sql.SQLException;

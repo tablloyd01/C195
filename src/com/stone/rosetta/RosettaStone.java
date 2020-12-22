@@ -47,6 +47,7 @@ public class RosettaStone extends Application {
     public void stop() throws Exception {
         super.stop();
         System.out.println("on stop");
+        RSScheduleService.stopAllJob();
     }
     
     

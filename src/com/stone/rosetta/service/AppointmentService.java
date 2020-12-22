@@ -11,6 +11,9 @@ import com.stone.rosetta.repository.model.User;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
 import com.stone.rosetta.throwable.OutsideBusinessHoursException;
 import com.stone.rosetta.throwable.SchedulingOverlappingAppointmentException;
+import com.stone.rosetta.view.reports.Report1;
+import com.stone.rosetta.view.reports.Report2;
+import com.stone.rosetta.view.reports.Report3;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -84,6 +87,18 @@ public class AppointmentService {
 
     public List<Appointment> getAllNextWithin15Minutes() throws SQLException {
         return this.appointmentRepository.getAllNextWithin15Minutes();
+    }
+
+    public List<Report1> getAppointmentTypesByMonth(LocalDate ld) throws SQLException {
+        return this.appointmentRepository.getAppointmentTypesByMonth(ld);
+    }
+
+    public List<Appointment> getSchedulesByConsultants(User user) throws SQLException {
+        return this.appointmentRepository.getSchedulesByConsultants(user);
+    }
+
+    public List<Report3> getAppointmentCountGroupByDate(LocalDate ld) throws SQLException {
+        return this.appointmentRepository.getAppointmentCountGroupByDate(ld);
     }
     
     

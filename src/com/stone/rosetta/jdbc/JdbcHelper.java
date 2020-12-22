@@ -25,7 +25,7 @@ public class JdbcHelper {
 
     private Connection getConnection() throws SQLException {
         if(connection == null || connection.isClosed()){
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/u06bht", "U06bHt", "U06bHt");
+            connection = DriverManager.getConnection("jdbc:mysql://wgudb.ucertify.com:3306/U06bHt", "U06bHt", "53688718897");
             System.out.println("connection created: "+connection.getMetaData().getURL());
         }
         return connection;

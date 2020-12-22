@@ -17,7 +17,7 @@ import java.util.List;
 public class CountryRepository extends CrudRepository<Country, Long> {
 
     private String SELECT_ALL_QUERY = "SELECT countryId, country "
-            + "FROM u06bht.country;";
+            + "FROM U06bHt.country;";
 
     public CountryRepository() throws ClassNotFoundException {
     }

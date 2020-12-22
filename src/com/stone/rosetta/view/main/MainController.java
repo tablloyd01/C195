@@ -5,23 +5,30 @@
  */
 package com.stone.rosetta.view.main;
 
+import com.stone.rosetta.RSScheduleService;
+import com.stone.rosetta.repository.model.Appointment;
 import com.stone.rosetta.service.AppointmentService;
 import com.stone.rosetta.service.UserAuthenticationService;
 import com.stone.rosetta.view.AbstractController;
 import com.stone.rosetta.view.ViewFactory;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -42,7 +49,7 @@ public class MainController extends AbstractController implements Initializable 
     private AppointmentService appointmentService;
 
     public MainController() {
-
+//        on menu change listener lambda function
         this.menuChangeListener = (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             changePane(newValue);
         };
@@ -76,7 +83,7 @@ public class MainController extends AbstractController implements Initializable 
 //        menuList.getItems().add(rb.getString("users"));
         menuList.getSelectionModel().selectedItemProperty().addListener(menuChangeListener);
         menuList.getSelectionModel().select(rb.getString("appointments"));
-
+        startAlertJob();
     }
 
     private void changePane(String newValue) {
@@ -100,6 +107,42 @@ public class MainController extends AbstractController implements Initializable 
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void startAlertJob() {
+        ScheduledService<Appointment> scheduledService = new ScheduledService<Appointment>() {
+            @Override
+            protected Task<Appointment> createTask() {
+                System.out.println("createTask");
+                return new Task<Appointment>() {
+                    @Override
+                    protected Appointment call() throws Exception {
+                        System.out.println("call");
+                        List<Appointment> as = appointmentService.getAllNextWithin15Minutes();
+                        System.out.println("upcomming appointmetns within 15: " + as);
+                        if(as != null && as.size() > 0)
+                            return as.get(0);
+                        return null;
+                    }
+                };
+            }
+        };
+        scheduledService.setPeriod(Duration.minutes(15));
+        scheduledService.setDelay(Duration.seconds(5));
+//        lambda function used here to on succeed of schedule service
+        scheduledService.setOnSucceeded(event -> {
+            System.out.println("setOnSucceeded");
+            if(event.getSource().getValue() != null){
+                if(event.getSource().getValue() instanceof Appointment){
+                    Appointment a = (Appointment) event.getSource().getValue();
+                    System.out.println("appointment alert : " + a);
+                    new Alert(Alert.AlertType.INFORMATION, "Next Appointment \"".concat(a.getTitle()).concat("\" will start at "+ a.getStart().toLocalTime()))
+                            .show();
+                }
+            }
+        });
+        scheduledService.start();
+        RSScheduleService.addJob(scheduledService);
     }
 
 }

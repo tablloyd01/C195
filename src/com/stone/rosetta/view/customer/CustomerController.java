@@ -106,6 +106,7 @@ public class CustomerController implements Initializable {
         setTableColumn();
         refreshTable();
         customerTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+//       lambda function, on customer table selection listener
         customerTable.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Customer> observable, Customer oldValue, Customer newValue) -> {
             if (newValue != null) {
                 disableActionButtons(Boolean.FALSE);
@@ -124,24 +125,29 @@ public class CustomerController implements Initializable {
     private void setTableColumn() {
         customerNameTableColumn.setCellValueFactory(new PropertyValueFactory("name"));
         customerActiveTableColumn.setCellValueFactory(new PropertyValueFactory("active"));
+//        call back lambda function to set cell value factory
         addressLine1TableColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getAddress() != null) {
                 return new SimpleStringProperty(cellData.getValue().getAddress().getLine1());
             }
             return new SimpleStringProperty();
         });
+//        call back lambda function to set cell value factory
         addressLine2TableColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getAddress() != null && cellData.getValue().getAddress().getLine2() != null) {
                 return new SimpleStringProperty(cellData.getValue().getAddress().getLine2());
             }
             return new SimpleStringProperty();
         });
+//        call back lambda function to set cell value factory
         phoneTableColumn.setCellValueFactory(cellDate -> {
             return new SimpleStringProperty(cellDate.getValue().getAddress().getPhone());
         });
+//        call back lambda function to set cell value factory
         postalCodeTableColumn.setCellValueFactory(cellDate -> {
             return new SimpleStringProperty(cellDate.getValue().getAddress().getPostalCode());
         });
+//        call back lambda function to set cell value factory
         cityTableColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getAddress() != null && cellData.getValue().getAddress().getCity() != null) {
                 return new SimpleStringProperty(cellData.getValue().getAddress().getCity().getName());

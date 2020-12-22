@@ -9,6 +9,7 @@ import com.stone.rosetta.repository.model.User;
 import com.stone.rosetta.service.UserAuthenticationService;
 import com.stone.rosetta.throwable.IncorrectPasswordException;
 import com.stone.rosetta.throwable.UserNotFoundException;
+import com.stone.rosetta.util.ActivityLogger;
 import com.stone.rosetta.view.AbstractController;
 import com.stone.rosetta.view.ViewFactory;
 import java.io.IOException;
@@ -17,11 +18,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
@@ -40,7 +41,7 @@ public class LoginController extends AbstractController implements Initializable
     @FXML
     private TextField usernameTextField;
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordTextField;
     private ResourceBundle resourceBundle;
 
     /**
@@ -57,12 +58,11 @@ public class LoginController extends AbstractController implements Initializable
     public void login(Event event){
         this.usernameHintLabel.setText(null);
         this.passwordHintLabel.setText(null);
-        this.usernameTextField.setText("admin");
-        this.passwordTextField.setText("admin");
         try {
             User user = UserAuthenticationService.getInstance()
                     .findByUserName(this.usernameTextField.getText().trim(), this.passwordTextField.getText().trim());
             if(user != null){
+                ActivityLogger.logSignInActivity(user);
                 getStage().close();
                 ViewFactory.getInstance().main();
             }

@@ -10,6 +10,8 @@ import com.stone.rosetta.repository.model.Customer;
 import com.stone.rosetta.repository.model.User;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
 import com.stone.rosetta.util.ConvertUtil;
+import com.stone.rosetta.view.reports.Report1;
+import com.stone.rosetta.view.reports.Report3;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -22,16 +24,16 @@ import java.util.List;
  */
 public class AppointmentRepository extends CrudRepository<Appointment, Long> {
     
-    private final String INSERT_QUERY = "INSERT INTO u06bht.appointment "
+    private final String INSERT_QUERY = "INSERT INTO U06bHt.appointment "
             + "(customerId, userId, title, description, location, contact, `type`, url, `start`, `end`, createDate, createdBy, lastUpdate, lastUpdateBy) "
             + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?)";
-    private final String UPDATE_QUERY = "UPDATE u06bht.appointment "
+    private final String UPDATE_QUERY = "UPDATE U06bHt.appointment "
             + "SET customerId=?, userId=?, title=?, description=?, location=?, contact=?, `type`=?, url=?, `start`=?, `end`=?, lastUpdate=CURRENT_TIMESTAMP, lastUpdateBy=? "
             + "WHERE appointmentId=?";
     private final String SELECT_ALL_QUERY = "SELECT a.appointmentId, a.customerId, c.customerName, a.userId, u.userName, a.title, a.description, a.location, a.contact, a.`type`, a.url, a.`start`, a.`end` "
-            + "FROM u06bht.appointment a "
-            + "LEFT JOIN u06bht.customer c on c.customerId = a.customerId "
-            + "LEFT JOIN u06bht.user u on u.userId = a.userId ";
+            + "FROM U06bHt.appointment a "
+            + "LEFT JOIN U06bHt.customer c on c.customerId = a.customerId "
+            + "LEFT JOIN U06bHt.user u on u.userId = a.userId ";
     
     private final String SELECT_ALL_TODAY_QUERY = SELECT_ALL_QUERY 
             + "WHERE date(a.start) = date(now()) "
@@ -50,10 +52,20 @@ public class AppointmentRepository extends CrudRepository<Appointment, Long> {
             + "WHERE ((? between a.start and a.end) or (? between a.start and a.end)) and a.appointmentId != ? "
             + "ORDER BY a.start asc ";
     private final String SELECT_ALL_WITHIN_15_MINUTES_QUERY = SELECT_ALL_QUERY + ""
-            + "WHERE a.start between now() and ? "
+            + "WHERE a.start between ? and ? "
             + "ORDER BY a.start asc ";
     
-    private final String DELETE_BY_ID_QUERY = "DELETE FROM u06bht.appointment "
+    private final String SELECT_APPOINTMENT_BY_USER_QUERY = SELECT_ALL_QUERY 
+            + " WHERE a.userId = ? order by a.start desc ";
+    
+    private final String SELECT_APPOINTMENT_TYPES_BY_MONTH_QUERY = "select a.`type`, count(a.appointmentId) as _count from appointment a "
+            + "where a.start between ? and ? "
+            + "group by a.`type` ";
+    private final String SELECT_APPOINTMENT_COUNT_GROUP_BY_DATE_QUERY = "select date(a.`start`) as start, count(a.appointmentId) as _count from appointment a "
+            + "where a.start between ? and ? "
+            + "group by date(a.`start`) ";
+    
+    private final String DELETE_BY_ID_QUERY = "DELETE FROM U06bHt.appointment "
             + "WHERE appointmentId=?";
 
     private RowMapper<Appointment> rowMapper = null;
@@ -180,10 +192,36 @@ public class AppointmentRepository extends CrudRepository<Appointment, Long> {
 
     public List<Appointment> getAllNextWithin15Minutes() throws SQLException {
         return jdbcHelper.findAllBy(SELECT_ALL_WITHIN_15_MINUTES_QUERY,(ps) -> {
-            LocalDateTime withInLD = LocalDateTime.now().plusMinutes(15);
+            LocalDateTime withInLD = LocalDateTime.now();
             ps.setTimestamp(1, Timestamp.valueOf(withInLD));
+            ps.setTimestamp(2, Timestamp.valueOf(withInLD.plusMinutes(15)));
             return ps;
         }, rowMapper);
     }
+    
+    public List<Report1> getAppointmentTypesByMonth(LocalDate ld) throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_APPOINTMENT_TYPES_BY_MONTH_QUERY,(ps) -> {
+            ps.setTimestamp(1, Timestamp.valueOf(ld.atStartOfDay()));
+            ps.setTimestamp(2, Timestamp.valueOf(ld.plusMonths(1).minusDays(1).atStartOfDay()));
+            return ps;
+        }, rs -> new Report1(rs.getString("type"), rs.getInt("_count")));
+    }
+    
+    public List<Appointment> getSchedulesByConsultants(User user) throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_APPOINTMENT_BY_USER_QUERY,(ps) -> {
+            ps.setLong(1, user.getId());
+            return ps;
+        }, rowMapper);
+    }
+
+    public List<Report3> getAppointmentCountGroupByDate(LocalDate ld) throws SQLException {
+        return jdbcHelper.findAllBy(SELECT_APPOINTMENT_COUNT_GROUP_BY_DATE_QUERY,(ps) -> {
+            ps.setTimestamp(1, Timestamp.valueOf(ld.atStartOfDay()));
+            ps.setTimestamp(2, Timestamp.valueOf(ld.plusMonths(1).minusDays(1).atStartOfDay()));
+            return ps;
+        }, rs -> new Report3(ConvertUtil.toLocalDate(rs.getDate("start")), rs.getInt("_count")));
+    }
+    
+    
 
 }

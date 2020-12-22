@@ -18,9 +18,9 @@ import java.util.List;
 public class CityRepository extends CrudRepository<City, Long>{
     
     private String SELECT_ALL_QUERY = "SELECT cityId, city "
-            + "FROM u06bht.city ";
+            + "FROM U06bHt.city ";
     private String SELECT_ALL_BY_COUNTRY_ID_QUERY = "SELECT cityId, city "
-            + "FROM u06bht.city WHERE countryId = ?";
+            + "FROM U06bHt.city WHERE countryId = ?";
 
     public CityRepository() throws ClassNotFoundException {
     }

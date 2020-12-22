@@ -6,7 +6,6 @@
 package com.stone.rosetta.repository;
 
 import com.stone.rosetta.repository.model.Address;
-import com.stone.rosetta.repository.model.City;
 import com.stone.rosetta.throwable.EntityNotUpdatedException;
 import java.sql.SQLException;
 import java.util.List;
@@ -17,14 +16,14 @@ import java.util.List;
  */
 public class AddressRepository extends CrudRepository<Address, Long>{
     
-    private String INSERT_SQL = "INSERT INTO u06bht.address "
+    private String INSERT_SQL = "INSERT INTO U06bHt.address "
             + "(address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) "
             + "VALUES(?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, CURRENT_TIMESTAMP, ?);";
-    private String UPDATE_SQL = "UPDATE u06bht.address "
+    private String UPDATE_SQL = "UPDATE U06bHt.address "
             + "SET address=?, address2=?, cityId=?, postalCode=?, phone=?, lastUpdate=CURRENT_TIMESTAMP, lastUpdateBy=? "
             + "WHERE addressId=?";
     private String SELECT_ALL_BY_CITY_ID_QUERY = "SELECT addressId, address, address2, postalCode, phone  "
-            + "FROM u06bht.address WHERE cityId=?";
+            + "FROM U06bHt.address WHERE cityId=?";
 
     public AddressRepository() throws ClassNotFoundException {
     }
